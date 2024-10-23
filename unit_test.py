@@ -26,24 +26,6 @@ class TestPathFinding(unittest.TestCase):
         self.assertNotEqual(almost_pi, pi)
         self.assertAlmostEqual(first=almost_pi, second=pi, delta=1e-1)
 
-    def test_dfs_path(self):
-        global_game_data.current_graph_index = 0
-        global_game_data.target_node = {0: 2}
-
-        graph_data.graph_data = {
-            0: {
-                0: [(0, 0), [1, 3]],
-                1: [(1, 0), [0, 2]],
-                2: [(2, 0), [1, 4]],
-                3: [(0, -1), [0, 4]],
-                4: [(1, -1), [3, 2]]
-            }
-        }
- 
-    expected_path = [0, 1, 2, 4]
-    result_path = get_dfs_path()
-    self.assertEqual(result_path, expected_path, "the DFS path wasn't right")
-
     def test_bfs_path(self):
         global_game_data.current_graph_index = 0
         global_game_data.target_node = {0: 2}
@@ -58,9 +40,64 @@ class TestPathFinding(unittest.TestCase):
             }
         }
  
-    expected_path = [0, 1, 2, 4]
-    result_path = get_bfs_path()
-    self.assertEqual(result_path, expected_path, "the BFS path wasn't right")
+        expected_path = [0, 1, 2, 4]
+        result_path = get_bfs_path()
+        self.assertEqual(result_path, expected_path, "the BFS path wasn't right")
+
+    def test_bfs_path_2(self):
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = {0: 4}
+
+        graph_data.graph_data = {
+            0: {
+                0: [(0, 0), [1, 3]],
+                1: [(1, 0), [0, 2]],
+                2: [(2, 0), [1, 4]],
+                3: [(0, -1), [0, 4]],
+                4: [(1, -1), [3, 2]]
+            }
+        }
+ 
+        expected_path = [0, 3, 4]
+        result_path = get_bfs_path()
+        self.assertEqual(result_path, expected_path, "the BFS path wasn't right")
+
+    def test_dfs_path(self):
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = {0: 2}
+
+        graph_data.graph_data = {
+            0: {
+                0: [(0, 0), [1, 3]],
+                1: [(1, 0), [0, 2]],
+                2: [(2, 0), [1, 4]],
+                3: [(0, -1), [0, 4]],
+                4: [(1, -1), [3, 2]]
+            }
+        }
+ 
+        expected_path = [0, 3, 4, 2, 4]
+        result_path = get_dfs_path()
+        self.assertEqual(result_path, expected_path, "the DFS path wasn't right")
+
+    def test_dfs_path_2(self):
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = {0: 4}
+
+        graph_data.graph_data = {
+            0: {
+                0: [(0, 0), [1, 3]],
+                1: [(1, 0), [0, 2]],
+                2: [(2, 0), [1, 4]],
+                3: [(0, -1), [0, 4]],
+                4: [(1, -1), [3, 2]]
+            }
+        }
+ 
+        expected_path = [0, 3, 4]
+        result_path = get_dfs_path()
+        self.assertEqual(result_path, expected_path, "the DFS path wasn't right")
+
 
 
 
