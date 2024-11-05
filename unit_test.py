@@ -3,6 +3,7 @@ import unittest
 import graph_data
 import global_game_data
 from pathing import get_bfs_path, get_dfs_path
+from permutation import find_hamiltonian_cycles, get_perms_sjt
 
 
 class TestPathFinding(unittest.TestCase):
@@ -98,9 +99,48 @@ class TestPathFinding(unittest.TestCase):
         result_path = get_dfs_path()
         self.assertEqual(result_path, expected_path, "the DFS path wasn't right")
 
+    def test_hamiltonian_cycle(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data = [[(0,0), [1,2]], [(0,1), [2,0]], [(0,2), [1,0]]]
+        expected_cycles_graph_0 = [[1,1]]
+        result_cycles_graph_0 = find_hamiltonian_cycles(graph_data.graph_data)
+        self.assertEqual(result_cycles_graph_0, expected_cycles_graph_0, "Hamiltonian cycles for graph 0 are incorrect")
 
+    def test_hamiltonian_cycle_2(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data =[[(0,0), [1]], [(0,1), [0]]]
+        expected_cycles_graph_0 = -1
+        result_cycles_graph_0 = find_hamiltonian_cycles(graph_data.graph_data)
+        self.assertEqual(result_cycles_graph_0, expected_cycles_graph_0, "Hamiltonian cycles for graph 0 are incorrect")
 
+    def test_hamiltonian_cycle_3(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data = [[(0,0), [1,3]], [(0,1), [0,2]], [(0,2), [1,3]], [(0,3), [2,0]]]
+        expected_cycles_graph_0 = [[1,2,1],[2,1,2]]
+        result_cycles_graph_0 = find_hamiltonian_cycles(graph_data.graph_data)
+        self.assertEqual(result_cycles_graph_0, expected_cycles_graph_0, "Hamiltonian cycles for graph 0 are incorrect")
 
+    def test_hamiltonian_cycle_4(self):
+        global_game_data.current_graph_index = 0
+        graph_data.graph_data = [[(1,2), [1]], [(3,6), [0,2,3]], [(39,1), [1,3]], [(21, 2), [1,2]], [(2910, 2), [3]]]
+        expected_cycles_graph_0 = [[1, 2, 3, 1], [1, 3, 2, 1], [3, 1, 2, 3], [3, 2, 1, 3], [2, 3, 1, 2], [2, 1, 3, 2]]
+        result_cycles_graph_0 = find_hamiltonian_cycles(graph_data.graph_data)
+        self.assertEqual(result_cycles_graph_0, expected_cycles_graph_0, "Hamiltonian cycles for graph 0 are incorrect")
+
+    def test_sjt_4(self):
+        expected = [[1, 2, 3, 4], [1, 2, 4, 3], [1, 4, 2, 3], [4, 1, 2, 3], 
+                    [4, 1, 3, 2], [1, 4, 3, 2], [1, 3, 4, 2], [1, 3, 2, 4], 
+                    [3, 1, 2, 4], [3, 1, 4, 2], [3, 4, 1, 2], [4, 3, 1, 2], 
+                    [4, 3, 2, 1], [3, 4, 2, 1], [3, 2, 4, 1], [3, 2, 1, 4], 
+                    [2, 3, 1, 4], [2, 3, 4, 1], [2, 4, 3, 1], [4, 2, 3, 1], 
+                    [4, 2, 1, 3], [2, 4, 1, 3], [2, 1, 4, 3], [2, 1, 3, 4]]
+        result = get_perms_sjt(4)
+        self.assertEqual(result, expected, "sjt didnt work")
+
+    def test_sjt_3(self):
+        expected = [[1, 2, 3], [1, 3, 2], [3, 1, 2], [3, 2, 1], [2, 3, 1], [2, 1, 3]]
+        result = get_perms_sjt(3)
+        self.assertEqual(result, expected, "sjt didnt work")
 
 if __name__ == '__main__':
     unittest.main()
