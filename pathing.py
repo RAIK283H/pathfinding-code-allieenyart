@@ -1,3 +1,4 @@
+import f_w
 import graph_data
 import global_game_data
 import heapq
@@ -8,12 +9,14 @@ import math
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
-    #global_game_data.graph_paths.append(get_test_path())
-    #global_game_data.graph_paths.append(get_random_path())
-    #global_game_data.graph_paths.append(get_dfs_path())
-    #global_game_data.graph_paths.append(get_bfs_path())
-    global_game_data.graph_paths.append(get_dijkstra_path())
-    global_game_data.graph_paths.append(get_a_star_path())
+    global_game_data.graph_paths.append(get_test_path())
+    global_game_data.graph_paths.append(get_random_path())
+    global_game_data.graph_paths.append(get_dfs_path())
+    global_game_data.graph_paths.append(get_bfs_path())
+    # global_game_data.graph_paths.append(get_dijkstra_path())
+    # global_game_data.graph_paths.append(get_a_star_path())
+    global_game_data.graph_paths.append(get_f_w_path())
+
 
 
 
@@ -230,6 +233,28 @@ def get_a_star_path():
     for i in range(len(full_path) - 1):
         current_node = full_path[i]
         next_node = full_path[i + 1]
-        assert next_node in graph[current_node][1], "Invalid path: Node {current_node} is not connected to {next_node}."
+        assert next_node in graph[current_node][1], f"Invalid path: Node {current_node} is not connected to {next_node}."
 
+    return full_path
+
+def get_f_w_path():
+    start_node = 0
+    target_node = global_game_data.target_node[global_game_data.current_graph_index]
+    exit_node = len(graph_data.graph_data[global_game_data.current_graph_index]) - 1
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+
+    dist, parent = f_w.floyd_warshall(graph)
+
+    path_to_target = f_w.floyd_warshall_path(parent, start_node, target_node)
+    path_to_exit = f_w.floyd_warshall_path(parent, target_node, exit_node)
+
+    full_path = path_to_target + path_to_exit[1:]
+
+    assert full_path[0] == start_node, "path doesn't start at the start"
+    assert target_node in full_path, "target isn't in path"
+    assert full_path[-1] == exit_node, "path doesn't end at the end"
+    for i in range(len(full_path) - 1):
+        current_node = full_path[i]
+        next_node = full_path[i + 1]
+        assert next_node in graph[current_node][1], f"Invalid path: Node {current_node} is not connected to {next_node}."
     return full_path
